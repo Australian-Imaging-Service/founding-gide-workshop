@@ -1,6 +1,7 @@
 pydra[doc,dev]>=1.0a9  # core engine + pydra.tasks.common; [doc] pulls in matplotlib for show_workflow
 pydra-tasks-mrtrix3      # MrGrid, MrConvert examples
 fileformats-medimage     # Nifti1
+fileformats-medimage-extras # Nifti sample
 nibabel                  # NIfTI file I/O inside VoxelStats task
 nest-asyncio             # required to run async tasks inside a Jupyter notebook
 numpy
