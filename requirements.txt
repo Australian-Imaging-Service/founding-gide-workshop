@@ -3,6 +3,7 @@ pydra-tasks-mrtrix3      # MrGrid, MrConvert examples
 fileformats-medimage     # Nifti1
 nibabel                  # NIfTI file I/O inside VoxelStats task
 nest-asyncio             # required to run async tasks inside a Jupyter notebook
+numpy
 pydra2app-xnat >=0.5
 xnat4tests
 bash_kernel
