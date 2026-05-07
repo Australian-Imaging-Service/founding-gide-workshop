@@ -11,7 +11,7 @@ NUM_USERS = 15
 SIMPLE_DIR_SUBJECTS = [("subject01", "subject01_1"), ("subject02", "subject02_1")]
 OPENNEURO_SUBJECTS = [("subject01", "subject01_MR01"), ("subject02", "subject02_MR01")]
 
-XNAT_HOST = "http://localhost:8080"  # "https://xnat.neurodesk.org"
+XNAT_HOST = "https://xnat.neurodesk.org/"
 
 
 def create_project(session, project_id):
@@ -53,7 +53,7 @@ for k in range(3):
 
 print("Creating XNAT users and projects...")
 with xnat.connect(XNAT_HOST, user="admin", password=password) as session:
-    for i in range(NUM_USERS):
+    for i in range(NUM_USERS + 1):
         username = f"user{i}"
         print(f"Creating {username}...")
 
