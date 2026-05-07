@@ -39,7 +39,7 @@ def populate_openneuro_t1w(session, xproject, t1w_path):
 
 
 def grant_project_access(session, project_id, username):
-    session.put(f"/data/projects/{project_id}/users/Members/{username}")
+    session.put(f"/data/projects/{project_id}/users/Owners/{username}")
 
 
 print("Preparing test data...")
@@ -57,28 +57,37 @@ with xnat.connect(XNAT_HOST, user="admin", password=password) as session:
         username = f"user{i}"
         print(f"Creating {username}...")
 
-        session.post(
-            "/xapi/users",
-            json={
-                "username": username,
-                "password": f"password{i}",
-                "email": f"user{i}@workshop.example.com",
-                "firstName": "User",
-                "lastName": str(i),
-                "enabled": True,
-                "verified": True,
-            },
-        )
+        if username not in session.users:
+            session.post(
+                "/xapi/users",
+                json={
+                    "username": username,
+                    "password": f"password{i}",
+                    "email": f"user{i}@workshop.example.com",
+                    "firstName": "User",
+                    "lastName": str(i),
+                    "enabled": True,
+                    "verified": True,
+                },
+            )
+            session.users.clearcache()
 
         simple_dir_id = f"SIMPLE_DIR_{i}"
-        xproject = create_project(session, simple_dir_id)
-        populate_simple_dir(session, xproject, a_dir)
-        grant_project_access(session, simple_dir_id, username)
+        try:
+            xproject = session.projects[simple_dir_id]
+        except KeyError:
+            xproject = create_project(session, simple_dir_id)
+            populate_simple_dir(session, xproject, a_dir)
+            grant_project_access(session, simple_dir_id, username)
 
         openneuro_id = f"OPENNEURO_T1W_{i}"
-        xproject = create_project(session, openneuro_id)
-        populate_openneuro_t1w(session, xproject, t1w_path)
-        grant_project_access(session, openneuro_id, username)
+
+        try:
+            xproject = session.projects[openneuro_id]
+        except KeyError:
+            xproject = create_project(session, openneuro_id)
+            populate_openneuro_t1w(session, xproject, t1w_path)
+            grant_project_access(session, openneuro_id, username)
 
         print(f"  -> {simple_dir_id}, {openneuro_id}")
 
